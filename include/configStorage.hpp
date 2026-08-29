@@ -13,6 +13,9 @@ class ConfigStorage {
         String getDeviceToken();
         void setDeviceToken(const String& token);
 
+        String getActivationCode();
+        void setActivationCode(const String& code);
+
         String getWifiSSID();
         void setWifiSSID(const String& ssid);
 

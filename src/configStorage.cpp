@@ -13,6 +13,14 @@ void ConfigStorage::setGatewayId(int id) {
     prefs.putInt("gatewayId", id);
 }
 
+String ConfigStorage::getActivationCode() {
+    return prefs.getString("activationCode");
+}
+
+void ConfigStorage::setActivationCode(const String& code) {
+    prefs.putString("activationCode", code);
+}
+
 String ConfigStorage::getDeviceToken() {
     return prefs.getString("deviceToken");
 }

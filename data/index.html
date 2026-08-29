@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"/>
+    <title>Gateway</title>
+</head>
+<body>
+    <header class="header">
+        <h class="header-text">Setup Gateway</h>
+    </header>
+    <div id="container">
+        <div class="input-block">
+            <div class="text-block">
+                <p>WiFi SSID</p>
+            </div>
+            <input type="text" id="ssid" placeholder="Enter WiFi ssid">
+        </div>
+        <div class="input-block">
+            <div class="text-block">
+                <p>WiFi Password</p>
+            </div>
+            <input type="text" id="password" placeholder="Enter WiFi password">
+        </div>
+        <div class="input-block">
+            <div class="text-block">
+                <p>Activation Code</p>
+            </div>
+            <input type="text" id="activation-code" placeholder="Enter activation code">
+        </div>
+        <button id="apply-btn">Apply</button>
+    </div>
+    <div id="load-block">
+        <p>Restart gateway and connect to WiFi</p>
+        <div class="loader"></div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
