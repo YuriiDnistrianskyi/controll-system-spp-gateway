@@ -3,7 +3,9 @@
 
 enum BootMode {
     LOCAL_SERVER_MODE,
+    INITIALIZATION_MODE,
     OPERATIONG_MODE,
+    ERROR_MODE
 };
 
 class BootManager {
@@ -12,6 +14,7 @@ class BootManager {
         void loop();
 
     private:
+        void scan();
         BootMode bootMode;
 };
 
