@@ -1,15 +1,16 @@
 #include <LittleFS.h>
 
-#include "../include/bootManager.hpp"
-#include "../include/configStorage.hpp"
-#include "../include/wifiManager.hpp"
-#include "../include/localServer.hpp"
+#include "../include/core/bootManager.hpp"
+#include "../include/core/configStorage.hpp"
+#include "../include/connection/wifiManager.hpp"
+#include "../include/services/localServerService.hpp"
+#include "../include/services/operationService.hpp"
+#include "../include/connection/websocketManager.hpp"
 
 ConfigStorage configStorage;
 
 WifiManager wifiManager;
-
-LocalServer localServer;
+WebSocketManager webSocketManager;
 
 void BootManager::scan() {
     configStorage.begin();
@@ -65,14 +66,15 @@ void BootManager::setup() {
     scan();
     switch(bootMode) {
         case LOCAL_SERVER_MODE:
-            wifiManager.initWifi();
-            localServer.begin();
+            localServerService.setup();
             break;
         case INITIALIZATION_MODE:
             // TODO
+            bootMode = OPERATIONG_MODE;
             break;
         case OPERATIONG_MODE:
-            // TODO
+            operationService.setup();
+            webSocketManager.connect();
             break;
         case ERROR_MODE:
             Serial.println("Error mode. Please check the logs.");
@@ -87,9 +89,10 @@ void BootManager::setup() {
 void BootManager::loop() {
     switch(bootMode) {
         case LOCAL_SERVER_MODE:
-            localServer.loop();
+            localServerService.loop();
             break;
         case OPERATIONG_MODE:
+            operationService.loop();
             break;
         case ERROR_MODE:
             break;

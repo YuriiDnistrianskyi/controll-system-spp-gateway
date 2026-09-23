@@ -1,4 +1,4 @@
-#include "../include/config.hpp"
+#include "../include/core/config.hpp"
 
 const char* SERVER_URL = "";
 

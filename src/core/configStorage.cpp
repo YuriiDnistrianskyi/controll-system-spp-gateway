@@ -1,5 +1,5 @@
 #include <Preferences.h>
-#include "../include/configStorage.hpp"
+#include "../include/core/configStorage.hpp"
 
 void ConfigStorage::begin() {
     prefs.begin("config");
