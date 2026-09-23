@@ -6,8 +6,8 @@
 
 class LocalServerService : public IService{
     public:
-        void setup();
-        void loop();
+        void setup() override;
+        void loop() override;
 
     private:
         WebServer server{80};

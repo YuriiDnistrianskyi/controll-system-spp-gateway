@@ -5,12 +5,10 @@
 #include "../include/connection/wifiManager.hpp"
 #include "../include/services/localServerService.hpp"
 #include "../include/services/operationService.hpp"
-#include "../include/connection/websocketManager.hpp"
 
 ConfigStorage configStorage;
 
 WifiManager wifiManager;
-WebSocketManager webSocketManager;
 
 void BootManager::scan() {
     configStorage.begin();
@@ -74,7 +72,6 @@ void BootManager::setup() {
             break;
         case OPERATIONG_MODE:
             operationService.setup();
-            webSocketManager.connect();
             break;
         case ERROR_MODE:
             Serial.println("Error mode. Please check the logs.");
