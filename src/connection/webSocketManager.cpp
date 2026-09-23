@@ -4,17 +4,26 @@
 #include "../include/connection/websocketManager.hpp"
 
 #include "../include/core/config.hpp"
+#include "../include/handlers/initHandler.hpp";
+#include "../include/handlers/devicesHandler.hpp";
+#include "../include/handlers/commandHandler.hpp";
 
 WebSocketsClient webSocket;
 
 void WebSocketManager::handleWebSocketMessage(const JsonDocument& doc) {
     const char* type = doc["type"]:
     switch(type) {
-        case "auth":
-            authHandler.handle(doc);
+        case "init":
+            initHandler.handle(doc);
+            Serial.println("Init message handled");
+            break;
+        case "devices":
+            devicesHandler.handle(doc);
+            Serial.println("Devices message handled");
             break;
         case "command":
             commandHandler.handle(doc);
+            Serial.println("Command message handled");
             break;
         default:
             Serial.println("Unknown ws message type: " + String(type));

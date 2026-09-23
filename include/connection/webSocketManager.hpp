@@ -1,8 +1,9 @@
 #ifndef CONNECTING_MANAGER_HPP
 #define CONNECTING_MANAGER_HPP
 
-#include "../include/handlers/authHandler.hpp";
+#include "../include/handlers/initHandler.hpp";
 #include "../include/handlers/commandHandler.hpp";
+#include "../include/handlers/devicesHandler.hpp";
 
 class WebSocketManager {
     public:
@@ -12,7 +13,7 @@ class WebSocketManager {
 
     private:
         bool isConnected; //
-        AuthHandler authHandler;
+        InitHandler initHandler;
         CommandHandler commandHandler;
         void webSocketEvent(WStype_t type, uint8_t* payload, size_t length);
         void handleWebSocketMessage(const JsonDocument& doc);

@@ -2,6 +2,8 @@
 
 void OperationService::setup() {
     webSocketManager.connect();
+    // send token
+
     // esp now
 }
 
