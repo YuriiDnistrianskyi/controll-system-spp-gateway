@@ -9,13 +9,12 @@
 extern WebSocketManager webSocketManager;
 extern vector<ConnectionDevice> devices;
 
-ConnectionDevice getDeviceByMacAddress(const String macAddress) {
+ConnectionDevice StatusHandler:getDeviceByMacAddress(const String macAddress) {
     for (const auto& device : devices) {
         if (strcmp(device.macAddress, macAddress) == 0) {
             return device;
         }
     }
-    return nullptr;
 }
 
 
@@ -23,6 +22,8 @@ void StatusHandler:handle(const JsonDocument doc, const String macAddress) {
     const String state = doc["state"]
 
     // if (strcmp(state, "on") == 0) {
+    //
+    // } else {
     //
     // }
 

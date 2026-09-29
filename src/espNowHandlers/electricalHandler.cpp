@@ -5,42 +5,42 @@
 #include "../include/espNowHandlers/electricalHandler.hpp"
 
 #include "../include/connection/webSocketManager.hpp"
-#include "../include/structures/connection_device.hpp"
 #include "../include/structures/sensors.hpp"
 
-extern std::vector<ConnectionDevice> devices;
 extern std::vector<Sensor> sensors;
 
 extern WebSocketManager webSocketManager;
 
-bool ElectricalHandler:sensorIsFront(const String macAddress) {
+Sensor ElectricalHandler:getSensorByMacAddress(const String macAddress) {
     for (const &auto sensor : sensors) {
-        if (strcmp(macAddress, sensor.macAddress)) {
-            if (sensor.type == FRONT) {
-                return true;
-            }
+        if (strcmp(sensor.macAddress, macAddress) == 0) {
+            return sensor;
         }
     }
-    return false;
 }
 
 void ElectricalHandler::handle(const JsonDocument doc, const String macAddress) {
     int8_t voltage = doc["voltage"];
     int8_t current = doc["current"];
 
-    StaticJsonDocument<200> sensor;
-    sensor["macAddress"] = macAddress;
-    sensor["voltage"] = voltage;
-    sensor["current"] = current;
+    StaticJsonDocument<200> sensorDoc;
+    sensorDoc["macAddress"] = macAddress;
+    sensorDoc["voltage"] = voltage;
+    sensorDoc["current"] = current;
 
-    StaticJsonDocument sensors[1] = { sensor }
+    StaticJsonDocument sensors[1] = { sensorDoc };
 
     StaticJsonDocument<200> sendDoc;
     sendDoc["type"] = "snapshot";
     sendDoc["sensors"] = sensors;
 
+    Sensor sensor = getSensorByMacAddress(macAddress);
+    if (!sensor) {
+        Serial.println("Not found sensor by mac address: " + String(macAddress));
+        return;
+    }
 
-    if (sensorIsFront(macAddress) == true) {
+    if (sensor.type == FRONT) {
         //TODO 
         //battery
         StaticJsonDocument<200> battery;
