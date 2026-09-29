@@ -1,15 +1,14 @@
 #include <LittleFS.h>
 
-#include "../include/bootManager.hpp"
-#include "../include/configStorage.hpp"
-#include "../include/wifiManager.hpp"
-#include "../include/localServer.hpp"
+#include "../include/core/bootManager.hpp"
+#include "../include/core/configStorage.hpp"
+#include "../include/connection/wifiManager.hpp"
+#include "../include/services/localServerService.hpp"
+#include "../include/services/operationService.hpp"
 
 ConfigStorage configStorage;
 
 WifiManager wifiManager;
-
-LocalServer localServer;
 
 void BootManager::scan() {
     configStorage.begin();
@@ -37,7 +36,7 @@ void BootManager::scan() {
         bootMode = OPERATIONG_MODE;
         int id = configStorage.getGatewayId();
         String token = configStorage.getDeviceToken();
-        if (id == NULL || token.isEmpty()) {
+        if (id == 0 || token.isEmpty()) {
             String code = configStorage.getActivationCode();
             if (code.isEmpty()) {
                 Serial.println("Activation code is not set.");
@@ -65,14 +64,16 @@ void BootManager::setup() {
     scan();
     switch(bootMode) {
         case LOCAL_SERVER_MODE:
-            wifiManager.initWifi();
-            localServer.begin();
+            localServerService.setup();
             break;
         case INITIALIZATION_MODE:
             // TODO
+            // Send activate code
+            // ESP.restart();
+            bootMode = OPERATIONG_MODE;
             break;
         case OPERATIONG_MODE:
-            // TODO
+            operationService.setup();
             break;
         case ERROR_MODE:
             Serial.println("Error mode. Please check the logs.");
@@ -87,9 +88,10 @@ void BootManager::setup() {
 void BootManager::loop() {
     switch(bootMode) {
         case LOCAL_SERVER_MODE:
-            localServer.loop();
+            localServerService.loop();
             break;
         case OPERATIONG_MODE:
+            operationService.loop();
             break;
         case ERROR_MODE:
             break;

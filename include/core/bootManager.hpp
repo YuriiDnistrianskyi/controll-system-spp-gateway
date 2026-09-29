@@ -1,6 +1,9 @@
 #ifndef BOOT_MANAGER_HPP
 #define BOOT_MANAGER_HPP
 
+#include "../include/services/localServerService.hpp"
+#include "../include/services/operationService.hpp"
+
 enum BootMode {
     LOCAL_SERVER_MODE,
     INITIALIZATION_MODE,
@@ -14,8 +17,11 @@ class BootManager {
         void loop();
 
     private:
-        void scan();
+        LocalServerService localServerService;
+        OperationService operationService;
+
         BootMode bootMode;
+        void scan();
 };
 
 #endif // BOOT_MANAGER_HPP

@@ -1,7 +1,7 @@
 #include <WiFi.h>
 
-#include "../include/wifiManager.hpp"
-#include "../include/config.hpp"
+#include "../include/connection/wifiManager.hpp"
+#include "../include/core/config.hpp"
 
 
 IPAddress local_IP(192, 168, 4, 1);

@@ -1,12 +1,14 @@
 #include <WebServer.h>
 #include <LittleFS.h>
 
-#include "../include/localServer.hpp"
-#include "../include/configStorage.hpp"
+#include "../include/services/localServerService.hpp"
+#include "../include/connection/wifiManager.hpp"
+#include "../include/core/configStorage.hpp"
 
 extern ConfigStorage configStorage;
+extern WifiManager wifiManager;
 
-void LocalServer::handleClick() {
+void LocalServerService::handleClick() {
     String ssid = server.arg("ssid");
     String password = server.arg("password");
     String code = server.arg("code");
@@ -23,7 +25,9 @@ void LocalServer::handleClick() {
 }
 
 
-void LocalServer::begin() {
+void LocalServerService::setup() {
+    wifiManager.initWifi();
+
     server.on("/", HTTP_GET, [this]() {
         File file = LittleFS.open("/index.html", "r");
         server.streamFile(file, "text/html");
@@ -49,6 +53,6 @@ void LocalServer::begin() {
     server.begin();
 }
 
-void LocalServer::loop() {
+void LocalServerService::loop() {
     server.handleClient();
 }
