@@ -1,4 +1,4 @@
-#include <vector.h>
+#include <vector>
 
 #include "../include/espNowHandlers/statusHandler.hpp"
 
@@ -7,7 +7,7 @@
 
 
 extern WebSocketManager webSocketManager;
-extern vector<ConnectionDevice> devices;
+extern std::vector<ConnectionDevice> devices;
 
 ConnectionDevice StatusHandler:getDeviceByMacAddress(const String macAddress) {
     for (const auto& device : devices) {
@@ -18,7 +18,7 @@ ConnectionDevice StatusHandler:getDeviceByMacAddress(const String macAddress) {
 }
 
 
-void StatusHandler:handle(const JsonDocument doc, const String macAddress) {
+void StatusHandler:handle(const JsonDocument& doc, const String& macAddress) {
     const String state = doc["state"]
 
     // if (strcmp(state, "on") == 0) {
@@ -30,10 +30,10 @@ void StatusHandler:handle(const JsonDocument doc, const String macAddress) {
     StaticJsonDocument<200> sendDoc;
     StaticJsonDocument<200> deviceDoc;
 
-    ConnectionDevice device = getDeviceByMacAddress(macAddress)
+    ConnectionDevice device = getDeviceByMacAddress(macAddress);
 
     if (!device) {
-        Serial.println("Not found conencted device by mac address: " + String(macAddress))
+        Serial.println("Not found conencted device by mac address: " + String(macAddress));
         return;
     }
 

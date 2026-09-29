@@ -12,17 +12,42 @@
 extern std::vector<ConnectionDevice> devices;
 extern std::vector<Sensor> sensors;
 
-void EspNowManager::sendData(const String macAddressString, const uint8_t* data) {
-    unsigned int macAddressInt[6];
-    //TODO
-    sscanf(
-        macAddressString.c_str(),
-        "%02x:%02x:%02x:%02x:%02x:%02x",
-        &macAddressInt[0], &macAddressInt[1], &macAddressInt[2],
-        &macAddressInt[3], &macAddressInt[4], &macAddressInt[5]
-    );
+void EspNowManager::sendData(const String& macAddressString, const JsonDocument& data) {
+    unsigned int parts[6];
 
-    esp_err_t result = esp_now_send((uint8_t)macAddressInt, data, sizeof(data));
+    if (sscanf(
+        macAddressString.c_str(),
+        "%2x:%2x:%2x:%2x:%2x:%2x",
+        &parts[0], &parts[1], &parts[2],
+        &parts[3], &parts[4], &parts[5]
+    ) != 6 ) {
+        Serial.println("Incorrect mac address (step 1) (espnow sendData): " + String(macAddressString));
+        return;
+    }
+
+    uint8_t macAddress[6];
+    for (size_t i = 0; i < 6; ++i) {
+        if(parts[i] > 0xFF) {
+            Serial.println("Incorrect mac address (step 2) (espnow sendData): " + String(macAddressString));
+            return;
+        }
+        macAddress[i] = static_cast<uint8_t>(parts[i]);
+    }
+
+    std::vector<char> payload(measureJson(data) + 1);
+    const size_t payloadLength = 
+        serializeJson(data, payload.data(), payload.size());
+
+    if(payloadLength > ESP_NOW_MAX_DATA_LEN) {
+        Serial.println("So long msg for espnow sendData: " + String(payloadLength));
+        return;
+    }
+
+    esp_err_t result = esp_now_send(
+        macAddress, 
+        reinterpret_cast<const uint8_t*>(payload.data()),
+        payloadLength
+    );
 }
 
 void EspNowManager::handleSend(const uint8_t* macAddress, esp_now_send_status_t sendStatus) {
@@ -57,7 +82,7 @@ void EspNowManager::handleRecv(const uint8_t* macAddress, const uint8_t* data, i
     if (strcmp(type, "electrical") == 0) {
         electricalHandler.handle(doc, macString);
     } else if (strcmp(type, "status") == 0) {
-        statusHandler.handle(doc, mactring);
+        statusHandler.handle(doc, macString);
     } else {
         Serial.println("Unknown esp now message type: " + String(type));
     }

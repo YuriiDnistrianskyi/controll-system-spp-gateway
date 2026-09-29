@@ -29,11 +29,11 @@ void WebSocketManager::handleWebSocketMessage(const JsonDocument& doc) {
 
 void WebSocketManager::webSocketEvent(WStype_t type, uint8_t* payload, size_t length) {
     switch(type) {
-        case WS_DISCONNECTED:
+        case WStype_DISCONNECTED:
             Serial.println("WebSocket Disconnected");
             // isConnected = false;
             break;
-        case WS_CONNECTED:
+        case WStype_CONNECTED:
             Serial.println("WebSocket Connected");
             // isConencted = true;
             break;
@@ -52,7 +52,9 @@ void WebSocketManager::webSocketEvent(WStype_t type, uint8_t* payload, size_t le
 
 void WebSocketManager::connect() {
     webSocket.begin(SERVER_URL, SERVER_PORT, SERVER_PATH);
-    webSocket.onEvent(webSocketEvent);
+    webSocket.onEvent([this](WStype_t type, uint8_t* data, size_t length) {
+        webSocketEvent(type, data, length);
+    });
     webSocket.setReconnectInterval(5000);
 }
 
@@ -60,7 +62,7 @@ void WebSocketManager::loop() {
     webSocket.loop();
 }
 
-void WebSocketManager::send(const JsonDocument doc) {
+void WebSocketManager::send(const JsonDocument& doc) {
     String payload;
     serializeJson(doc, payload);
     webSocket.sendTXT(payload);

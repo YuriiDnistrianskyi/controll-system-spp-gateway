@@ -1,5 +1,5 @@
 #include <ArduinJson.h>
-#include <vector.h>
+#include <vector>
 
 
 #include "../include/espNowHandlers/electricalHandler.hpp"
@@ -11,7 +11,7 @@ extern std::vector<Sensor> sensors;
 
 extern WebSocketManager webSocketManager;
 
-Sensor ElectricalHandler:getSensorByMacAddress(const String macAddress) {
+Sensor ElectricalHandler:getSensorByMacAddress(const String& macAddress) {
     for (const &auto sensor : sensors) {
         if (strcmp(sensor.macAddress, macAddress) == 0) {
             return sensor;
@@ -19,7 +19,7 @@ Sensor ElectricalHandler:getSensorByMacAddress(const String macAddress) {
     }
 }
 
-void ElectricalHandler::handle(const JsonDocument doc, const String macAddress) {
+void ElectricalHandler::handle(const JsonDocument& doc, const String& macAddress) {
     int8_t voltage = doc["voltage"];
     int8_t current = doc["current"];
 

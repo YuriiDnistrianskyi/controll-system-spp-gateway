@@ -1,5 +1,5 @@
 #include <ArduinoJson.h>
-#include <vector.h>
+#include <vector>
 
 #include "../include/wsHandlers/devicesHandler.hpp"
 
@@ -13,7 +13,7 @@ void DevicesHandler::handle(const JsonDocument& doc) {
     devices.clear();
     sensors.clear();
 
-    for (JsonObject device : doc["connected_devices".as<JsonArray>()]) {
+    for (JsonObject device : doc["connected_devices"].as<JsonArray>()) {
         devices.push_back({
             device["id"],
             device["mac_address"].as<String>()

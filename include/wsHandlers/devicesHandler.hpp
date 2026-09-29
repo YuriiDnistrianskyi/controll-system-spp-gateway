@@ -5,7 +5,7 @@
 
 #include "../include/wsHandlers/iWsHandler.hpp"
 
-class DevicesHandler : public IHandler {
+class DevicesHandler : public IWsHandler {
     public:
         void handle(const JsonDocument& doc) override;
 };

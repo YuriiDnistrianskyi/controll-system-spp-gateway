@@ -36,7 +36,7 @@ void BootManager::scan() {
         bootMode = OPERATIONG_MODE;
         int id = configStorage.getGatewayId();
         String token = configStorage.getDeviceToken();
-        if (id == NULL || token.isEmpty()) {
+        if (id == 0 || token.isEmpty()) {
             String code = configStorage.getActivationCode();
             if (code.isEmpty()) {
                 Serial.println("Activation code is not set.");
