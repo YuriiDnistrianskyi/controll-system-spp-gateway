@@ -3,7 +3,7 @@
 
 #include <ArduinoJson.h>
 
-#include "../include/handlers/iHandler.hpp"
+#include "../include/wsHandlers/iWsHandler.hpp"
 
 class DevicesHandler : public IHandler {
     public:

@@ -9,8 +9,8 @@ class OperationService : public IService {
         void setup() override;
         void loop() override;
 
-    private:
-        WebSocketManager webSocketManager;
+    // private:
+    //     WebSocketManager webSocketManager;
 };
 
 #endif // OPERATION_SERVICE_HPP

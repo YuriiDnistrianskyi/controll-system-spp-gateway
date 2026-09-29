@@ -68,6 +68,8 @@ void BootManager::setup() {
             break;
         case INITIALIZATION_MODE:
             // TODO
+            // Send activate code
+            // ESP.restart();
             bootMode = OPERATIONG_MODE;
             break;
         case OPERATIONG_MODE:

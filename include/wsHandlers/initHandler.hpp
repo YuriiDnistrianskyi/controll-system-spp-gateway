@@ -3,9 +3,9 @@
 
 #include <ArduinoJson.h>
 
-#include "../include/handlers/iHandler.hpp"
+#include "../include/wsHandlers/iWsHandler.hpp"
 
-class InitHandler : public IHandler {
+class InitHandler : public IWsHandler {
     public:
         void handle(const JsonDocument& doc) override;
 };

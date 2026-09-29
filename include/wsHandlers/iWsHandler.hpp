@@ -1,11 +1,11 @@
-#ifndef I_HANDLER_HPP
-#define I_HANDLER_HPP
+#ifndef I_WS_HANDLER_HPP
+#define I_WS_HANDLER_HPP
 
 #include <ArduinoJson.h>
 
-class IHandler {
+class IWsHandler {
     public:
         virtual void handle(const JsonDocument& doc) = 0;
 };
 
-#endif // I_HANDLER_HPP
+#endif // I_WS_HANDLER_HPP

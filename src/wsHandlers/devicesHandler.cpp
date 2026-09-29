@@ -1,6 +1,7 @@
 #include <ArduinoJson.h>
+#include <vector.h>
 
-#include "../include/handlers/devicesHandler.hpp"
+#include "../include/wsHandlers/devicesHandler.hpp"
 
 #include "../include/structures/connection_device.hpp"
 #include "../include/structures/sensors.hpp"

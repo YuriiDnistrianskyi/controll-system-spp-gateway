@@ -1,33 +1,29 @@
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
 
-#include "../include/connection/websocketManager.hpp"
+#include "../include/connection/webSocketManager.hpp"
 
 #include "../include/core/config.hpp"
-#include "../include/handlers/initHandler.hpp";
-#include "../include/handlers/devicesHandler.hpp";
-#include "../include/handlers/commandHandler.hpp";
+#include "../include/wsHandlers/initHandler.hpp"
+#include "../include/wsHandlers/devicesHandler.hpp"
+#include "../include/wsHandlers/commandHandler.hpp"
 
 WebSocketsClient webSocket;
 
 void WebSocketManager::handleWebSocketMessage(const JsonDocument& doc) {
-    const char* type = doc["type"]:
-    switch(type) {
-        case "init":
-            initHandler.handle(doc);
-            Serial.println("Init message handled");
-            break;
-        case "devices":
-            devicesHandler.handle(doc);
-            Serial.println("Devices message handled");
-            break;
-        case "command":
-            commandHandler.handle(doc);
-            Serial.println("Command message handled");
-            break;
-        default:
-            Serial.println("Unknown ws message type: " + String(type));
-            break;
+    const char* type = doc["type"];
+
+    if (strcmp(type, "initialization") == 0) {
+        initHandler.handle(doc);
+        Serial.println("Init message handled");
+    } else if (strcmp(type, "devices") == 0) {
+        devicesHandler.handle(doc);
+        Serial.println("Devices message handled");
+    } else if (strcmp(type, "command") == 0 ) {
+        commandHandler.handle(doc);
+        Serial.println("Command message handled");
+    } else {
+        Serial.println("Unknown ws message type: " + String(type));
     }
 }
 
@@ -46,7 +42,7 @@ void WebSocketManager::webSocketEvent(WStype_t type, uint8_t* payload, size_t le
             StaticJsonDocument<200> doc;
             DeserializationError error = deserializeJson(doc, payload, length);
             if (error) {
-                Serial.println("Deserialization Error: " + String(error.c_str()));
+                Serial.println("Deserialization Error WS: " + String(error.c_str()));
                 return;
             }
             handleWebSocketMessage(doc);
@@ -64,11 +60,7 @@ void WebSocketManager::loop() {
     webSocket.loop();
 }
 
-void WebSocketManager::send() {
-    StaticJsonDocument<200> doc;
-    doc["value"] = (fanSpeed * 100) / 255;
-    Serial.println("Send speed: " + String(fanSpeed));
-
+void WebSocketManager::send(const JsonDocument doc) {
     String payload;
     serializeJson(doc, payload);
     webSocket.sendTXT(payload);

@@ -1,6 +1,6 @@
 #include <ArduinoJson.h>
 
-#include "../include/handlers/inithHandler.hpp"
+#include "../include//wsHandlers/initHandler.hpp"
 #include "../include/core/configStorage.hpp"
 
 extern ConfigStorage configStorage;
