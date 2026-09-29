@@ -10,6 +10,10 @@
 
 WebSocketsClient webSocket;
 
+InitHandler WebSocketManager::initHandler;
+DevicesHandler WebSocketManager::devicesHandler;
+CommandHandler WebSocketManager::commandHandler;
+
 void WebSocketManager::handleWebSocketMessage(const JsonDocument& doc) {
     const char* type = doc["type"];
 
@@ -39,7 +43,7 @@ void WebSocketManager::webSocketEvent(WStype_t type, uint8_t* payload, size_t le
             break;
         case WStype_TEXT:
             Serial.println("WebSocket Message: " + String((char*)payload));
-            StaticJsonDocument<200> doc;
+            JsonDocument doc;
             DeserializationError error = deserializeJson(doc, payload, length);
             if (error) {
                 Serial.println("Deserialization Error WS: " + String(error.c_str()));

@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include "../include/bootManager.hpp"
+#include "../include/core/bootManager.hpp"
 
 BootManager bootManager;
 

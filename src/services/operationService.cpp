@@ -13,7 +13,7 @@ WebSocketManager webSocketManager;
 
 void OperationService::setup() {
     webSocketManager.connect();
-    StaticJsonDocument<200> doc;
+    JsonDocument doc;
     doc["type"] = "authentication";
     doc["id"] = configStorage.getGatewayId();
     doc["token"] = configStorage.getDeviceToken();

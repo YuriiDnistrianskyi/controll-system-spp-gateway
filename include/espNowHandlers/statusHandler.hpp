@@ -11,7 +11,7 @@ class StatusHandler : public IEspNowHandler {
         void handle(const JsonDocument& doc, const String& macAddress) override;
 
     private:
-        ConnectionDevice getDeviceByMacAddress(const String& macAddress);
+        const ConnectionDevice* getDeviceByMacAddress(const String& macAddress);
 };
 
 #endif // STATUS_HANDLER_HPP

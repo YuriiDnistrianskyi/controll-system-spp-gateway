@@ -12,6 +12,9 @@
 extern std::vector<ConnectionDevice> devices;
 extern std::vector<Sensor> sensors;
 
+ElectricalHandler EspNowManager::electricalHandler;
+StatusHandler EspNowManager::statusHandler;
+
 void EspNowManager::sendData(const String& macAddressString, const JsonDocument& data) {
     unsigned int parts[6];
 
@@ -55,7 +58,7 @@ void EspNowManager::handleSend(const uint8_t* macAddress, esp_now_send_status_t 
 }
 
 void EspNowManager::handleRecv(const uint8_t* macAddress, const uint8_t* data, int len) {
-    StaticJsonDocument<200> doc;
+    JsonDocument doc;
 
     DeserializationError error = deserializeJson(doc, data, len);
 
@@ -81,7 +84,7 @@ void EspNowManager::handleRecv(const uint8_t* macAddress, const uint8_t* data, i
 
     if (strcmp(type, "electrical") == 0) {
         electricalHandler.handle(doc, macString);
-    } else if (strcmp(type, "status") == 0) {
+    } else if (strcmp(type, "state") == 0) {
         statusHandler.handle(doc, macString);
     } else {
         Serial.println("Unknown esp now message type: " + String(type));

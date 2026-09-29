@@ -1,4 +1,4 @@
-#include <ArduinJson.h>
+#include <ArduinoJson.h>
 #include <vector>
 
 
@@ -11,44 +11,44 @@ extern std::vector<Sensor> sensors;
 
 extern WebSocketManager webSocketManager;
 
-Sensor ElectricalHandler:getSensorByMacAddress(const String& macAddress) {
-    for (const &auto sensor : sensors) {
-        if (strcmp(sensor.macAddress, macAddress) == 0) {
-            return sensor;
+const Sensor* ElectricalHandler::getSensorByMacAddress(const String& macAddress) {
+    for (const auto& sensor : sensors) {
+        if (sensor.macAddress == macAddress) {
+            return &sensor;
         }
     }
+    return nullptr;
 }
 
 void ElectricalHandler::handle(const JsonDocument& doc, const String& macAddress) {
     int8_t voltage = doc["voltage"];
     int8_t current = doc["current"];
 
-    StaticJsonDocument<200> sensorDoc;
-    sensorDoc["macAddress"] = macAddress;
-    sensorDoc["voltage"] = voltage;
-    sensorDoc["current"] = current;
-
-    StaticJsonDocument sensors[1] = { sensorDoc };
-
-    StaticJsonDocument<200> sendDoc;
+    JsonDocument sendDoc;
     sendDoc["type"] = "snapshot";
-    sendDoc["sensors"] = sensors;
 
-    Sensor sensor = getSensorByMacAddress(macAddress);
-    if (!sensor) {
+    JsonObject sensorObject = sendDoc["sensors"].to<JsonObject>();
+
+    // JsonArray sensors = sendDoc["sensors"].to<JsonArray>();
+    // JsonObject sensorObject = sensors.add<JsonObject>();
+
+    sensorObject["macAddress"] = macAddress;
+    sensorObject["voltage"] = voltage;
+    sensorObject["current"] = current;
+    sensorObject["power"] = voltage * current;
+
+    const Sensor* sensor = getSensorByMacAddress(macAddress);
+    if (sensor == nullptr) {
         Serial.println("Not found sensor by mac address: " + String(macAddress));
         return;
     }
 
-    if (sensor.type == FRONT) {
+    if (sensor->type == FRONT) {
         //TODO 
         //battery
-        StaticJsonDocument<200> battery;
-        battery["SoC"] = 100; //
-        battery["sensor_id"] = 1; //
-
-        StaticJsonDocument batteries[1] = { battery }
-        sendDoc["battery"] = batteries
+        JsonObject batteryObject = sendDoc.to<JsonObject>();
+        batteryObject["SoC"] = 100; //
+        batteryObject["sensor_id"] = 1; //
     }
 
     webSocketManager.send(sendDoc);

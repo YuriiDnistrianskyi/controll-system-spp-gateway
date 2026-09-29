@@ -13,7 +13,7 @@ class EspNowManager {
 
     private:
         static ElectricalHandler electricalHandler;
-        static StatuslHandler statusHandler;
+        static StatusHandler statusHandler;
         bool addPeer(const String& macAddressString);
         static void handleSend(const uint8_t* macAddress, esp_now_send_status_t sendStatus);
         static void handleRecv(const uint8_t* macAddress, const uint8_t* data, int len);

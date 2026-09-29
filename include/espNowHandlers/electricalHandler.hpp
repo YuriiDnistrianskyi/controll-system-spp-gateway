@@ -11,7 +11,7 @@ class ElectricalHandler : public IEspNowHandler {
         void handle(const JsonDocument& doc, const String& macAddress) override;
     
     private:
-        Sensor getSensorByMacAddress(const String& macAddress);
+        const Sensor* getSensorByMacAddress(const String& macAddress);
 };
 
 #endif // ELECTRICAL_HANDLER_HPP
